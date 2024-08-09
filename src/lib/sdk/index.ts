@@ -132,18 +132,21 @@ export default class IntuitSDK {
   async revoke() {
     const revoke = this.url.get_base_url(IntuitEndpointKey.revoke);
     const header = {
-      Accept: 'application/json',
       'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: 'Basic ' + this.authBase64,
+      'User-Agent': 'Intuit-oauth-sdk',
     };
 
+    console.log(revoke, this.refresh_token, header.Authorization);
     const response = await fetch(revoke, {
       method: 'POST',
       headers: header,
-      body: JSON.stringify({
-        token: this.refresh_token,
+      body: new URLSearchParams({
+        token: this.refresh_token!,
       }),
     });
+
+    console.log('text', response.status);
     return response.ok;
   }
 }
